@@ -1,0 +1,34 @@
+defaults:
+  - _self_
+
+# experiment
+experiment: riql
+# riql
+Agent:
+  _target_: algo.model_free.riql.RIQL
+  state_dim: ${state_dim}
+  action_dim: ${action_dim}
+  action_limit: ${action_limit}
+  actor_lr: ${actor_lr}
+  actor_update_freq: ${actor_update_freq}
+  critic_lr: ${critic_lr}
+  critic_tau: ${critic_tau}
+  critic_target_update_freq: ${critic_target_update_freq}
+  num_q: ${num_q}
+  gamma: ${gamma}
+  l: ${agent_l}
+  hidden_dim: ${agent_hidden_dim}
+  critic_type: vectorized
+  std_architecture: weight
+  num_value: 1
+  max_epochs: ${max_epochs}
+  step_per_epoch: ${num_trains_per_train_loop}
+  beta: 3.0
+  iql_tau: 0.7
+  quantile: 0.25
+  clip_score: 100
+  sigma: 1.0
+  device:
+    _target_: torch.device
+    type: ${device}
+    index: ${cuda_id}

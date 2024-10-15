@@ -1,0 +1,56 @@
+defaults:
+  - _self_
+
+# experiment
+experiment: tracer
+
+Agent:
+  _target_: algo.model_free.tracer.TRACER
+  state_dim: ${state_dim}
+  action_dim: ${action_dim}
+  action_limit: ${action_limit}
+  actor_lr: ${actor_lr}
+  actor_update_freq: ${actor_update_freq}
+  critic_lr: ${critic_lr}
+  critic_tau: ${critic_tau}
+  critic_target_update_freq: ${critic_target_update_freq}
+  num_q: ${num_q}
+  q_std:
+    - -5
+    - 2
+  cosines_dim: 64
+  num_quantiles: 32
+  gamma: ${gamma}
+  l: ${agent_l}
+  hidden_dim: ${agent_hidden_dim}
+  critic_type: vectorized
+  critic_init_type: edac # (edac, fanin, xavier, kaiming, truncated)
+  std_architecture: mlp # (mlp, weight)
+  num_value: 1
+  max_epochs: ${max_epochs}
+  step_per_epoch: ${num_trains_per_train_loop}
+  beta: 3.0
+  iql_tau: 0.7
+  quantile:  0.25
+  clip_score: 100
+  sigma: 0.1
+  device:
+    _target_: torch.device
+    type: ${device}
+    index: ${cuda_id}
+  num_model: 3
+  model_lr: 0.0003
+  obser_sigma: 0.1
+  enable_entropy: false
+  obser_model_type: gaussian # (gaussian, mean)
+  obser_beta:
+    - 0.0001
+    - 0.01
+  obser_beta_epoch:
+    - 5
+    - 2000
+  load_obser_model: false
+  obser_model_dir: ~
+  obser_model_step: -1
+  lower_bound: 0.9
+  upper_bound: 1.0

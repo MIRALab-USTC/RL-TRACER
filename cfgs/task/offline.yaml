@@ -1,0 +1,37 @@
+defaults:
+  - _self_
+
+train_mode: offline
+# train settings
+max_epochs: 1000
+num_train_loops_per_epoch: 1
+num_trains_per_train_loop: 1000
+log_agent_freq: 500      # /step, total time step = 1,000,000
+save_agent: true
+save_agent_freq: 200     # /epoch, max epoch = 1000 --> 1m total time step
+
+# evaluate settings
+eval: true
+eval_freq: 5
+num_eval_episodes: 10
+gamma: 0.99
+
+# agent
+actor_lr: 1e-4
+critic_lr: 3e-4
+critic_tau: 0.005
+actor_update_freq: 1
+critic_target_update_freq: 2
+num_q: 2
+agent_hidden_dim: 256
+agent_l: 2
+target_entropy: ~
+behavior_cloning: false
+
+alpha_lr: 1e-4
+init_temperature: 0.1
+
+# ddpg & td3
+act_noise: 0.1
+noise_clip: 0.5
+target_noise: 0.2

@@ -1,0 +1,94 @@
+defaults:
+  - _self_
+  - task@_global_: offline
+  - algo@_global_: iql
+  - override hydra/launcher: submitit_local
+
+# environment
+task_name: walker2d-medium-replay-v2
+state_dim: ???
+action_dim: ???
+action_limit: ???
+reward_dim: 1
+max_episode_steps: 1000
+default_setting: true
+
+# replay buffer
+batch_size: 256
+replay_buffer_num_workers: 8
+val_ratio: 0.2
+# misc
+seed: 0
+cuda_id: 2
+device: cuda
+save_video: false
+use_tb: true
+# experiment
+experiment: exp
+algo_name: ${experiment}
+
+# wandb logging
+use_wandb: false
+project: Offline_RL
+group: ${algo_name}
+
+# task
+train_agent: true
+
+# corruption
+use_corruption: false
+corrupt_cfg:
+  env_name: ${task_name}
+  seed: ${seed}
+  corruption_mode: random
+  corruption_rate: 0.1
+  corruption_range: 0.3
+  corruption_type: none # (obs, act, rew, dynamics, none)
+  corrupt_reward: false
+  corrupt_dynamics: false
+  corrupt_obs: false
+  corrupt_act: false
+  device:
+    _target_: torch.device
+    type: ${device}
+    index: ${cuda_id}
+
+norm_data:
+  norm_state: false
+  norm_action: false
+  norm_reward: false
+
+Buffer:
+  _target_: common.buffer.UnionReplayBuffer
+  capacity: ???
+  batch_size: ${batch_size}
+  val_ratio: ${val_ratio}
+  num_workers: ${replay_buffer_num_workers}
+  state_dim: ${state_dim}
+  action_dim: ${action_dim}
+  reward_dim: ${reward_dim}
+  device:
+    _target_: torch.device
+    type: ${device}
+    index: ${cuda_id}
+
+# load
+load_agent: false
+load_dir: /home/amax/rl/exp_local/hopper-medium-replay-v0_sac/hopper-medium-replay-v0_sac_s3/model
+load_agent_step: -1
+
+
+hydra:
+  run:
+    dir: ./exp_local/${task_name}/corruption_${corrupt_cfg.corruption_type}/${now:%Y.%m.%d}/${algo_name}-${task_name}-${now:%H%M}/s${seed} #${hydra.job.override_dirname}
+  sweep:
+    dir: ./exp_local/${task_name}/corruption_${corrupt_cfg.corruption_type}/${now:%Y.%m.%d}/${algo_name}-${task_name}-${now:%H%M}
+    subdir: ${seed}
+  launcher:
+    timeout_min: 4300
+    cpus_per_task: 10
+    gpus_per_node: 1
+    tasks_per_node: 1
+    mem_gb: 160
+    nodes: 1
+    submitit_folder: ./exp_local/${task_name}/corruption_${corrupt_cfg.corruption_type}/${now:%Y.%m.%d}/${algo_name}-${task_name}-${now:%H%M}/s${seed}/.slurm

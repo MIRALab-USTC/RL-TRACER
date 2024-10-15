@@ -1,0 +1,27 @@
+name: tracer
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - pip=24.2
+  - numpy=1.24.3
+  - absl-py=2.1.0
+  - pyparsing=3.1.2
+  - nvidia::cudatoolkit=10.1
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - pytorch::torchaudio
+  - pip:
+    - termcolor==2.4.0
+    - imageio==2.35.1
+    - imageio-ffmpeg==0.5.1
+    - hydra-core==1.1.0
+    - hydra-submitit-launcher==1.1.5
+    - pandas==2.0.3
+    - mujoco_py==2.1.2.14
+    - matplotlib==3.7.5
+    - opencv-python==4.10.0.84
+    - gym==0.23.1
+    - d4rl==1.1
+    - dmc2gym==1.0.0
+    - wandb==0.17.7

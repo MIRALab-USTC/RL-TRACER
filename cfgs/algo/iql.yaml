@@ -1,0 +1,34 @@
+defaults:
+  - _self_
+
+# experiment
+experiment: iql
+# MODEL FREE
+# iql
+Agent:
+  _target_: algo.model_free.iql.IQL
+  state_dim: ${state_dim}
+  action_dim: ${action_dim}
+  action_limit: ${action_limit}
+  actor_lr: ${actor_lr}
+  actor_update_freq: ${actor_update_freq}
+  critic_lr: ${critic_lr}
+  critic_tau: ${critic_tau}
+  critic_target_update_freq: ${critic_target_update_freq}
+  num_q: ${num_q}
+  gamma: ${gamma}
+  l: ${agent_l}
+  hidden_dim: ${agent_hidden_dim}
+  critic_type: twin
+  std_architecture: weight
+  max_epochs: ${max_epochs}
+  step_per_epoch: ${num_trains_per_train_loop}
+  num_value: 1
+  value_mode: random
+  beta: 3.0
+  iql_tau: 0.7
+  clip_score: 100
+  device:
+    _target_: torch.device
+    type: ${device}
+    index: ${cuda_id}
